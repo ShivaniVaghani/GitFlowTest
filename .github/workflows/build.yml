@@ -21,7 +21,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        server-id: facebook-api-crud # Value of the distributionManagement/repository/id field of the pom.xml
+        server-id: GitFlowTest # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
         
     - name: Set up Maven settings
@@ -40,4 +40,4 @@ jobs:
             echo ${{ github.actor }}
                 
     - name: Build with Maven
-      run: mvn -B package --file facebook-api-crud/pom.xml
+      run: mvn -B package --file GitFlowTest/pom.xml
