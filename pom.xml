@@ -141,7 +141,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<mainClass>
-						in.bluefield.app.BluefieldApplication
+						in.bluefield.app.GitFlowTestApplication
 					</mainClass>
 					<excludes>
 						<exclude>

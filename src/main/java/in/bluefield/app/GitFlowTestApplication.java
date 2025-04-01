@@ -6,12 +6,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableScheduling
-@EnableAsync
-public class BluefieldApplication {
+public class GitFlowTestApplication {
 	public static void main(String[] args) {
 
-		SpringApplication.run(BluefieldApplication.class, args);
+		SpringApplication.run(GitFlowTestApplication.class, args);
 	}
 
 }
