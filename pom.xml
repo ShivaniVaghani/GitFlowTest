@@ -8,11 +8,11 @@
 		<version>3.2.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>in</groupId>
-	<artifactId>bluefield-backend</artifactId>
+	<groupId>in.bluefield.app</groupId>
+	<artifactId>GitFlowTest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bluefield-backend</name>
-	<description>Bluefield</description>
+	<name>GitFlowTest</name>
+	<description>GitFlowTest</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
