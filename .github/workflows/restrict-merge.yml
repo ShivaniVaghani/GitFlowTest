@@ -1,0 +1,46 @@
+name: Enforce GitFlow Merge Rules
+
+on:
+  pull_request:
+    branches:
+      - main
+      - 'release/*'
+      - develop
+
+jobs:
+  check-merge-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source and target branches
+        run: |
+          TARGET="${{ github.base_ref }}"
+          SOURCE="${{ github.head_ref }}"
+
+          echo "🔍 Target: $TARGET"
+          echo "🔍 Source: $SOURCE"
+
+          # Rule 1: main ← release/* or hotfix/*
+          if [[ "$TARGET" == "main" ]]; then
+            if [[ ! "$SOURCE" =~ ^release/.* && ! "$SOURCE" =~ ^hotfix/.* ]]; then
+              echo "❌ main can only be merged into from release/* or hotfix/*"
+              exit 1
+            fi
+          fi
+
+          # Rule 2: release/* ← develop or hotfix/*
+          if [[ "$TARGET" =~ ^release/.* ]]; then
+            if [[ "$SOURCE" != "develop" && ! "$SOURCE" =~ ^hotfix/.* ]]; then
+              echo "❌ release/* can only be merged into from develop or hotfix/*"
+              exit 1
+            fi
+          fi
+
+          # Rule 3: develop ← feature/* or hotfix/*
+          if [[ "$TARGET" == "develop" ]]; then
+            if [[ ! "$SOURCE" =~ ^feature/.* && ! "$SOURCE" =~ ^hotfix/.* ]]; then
+              echo "❌ develop can only be merged into from feature/* or hotfix/*"
+              exit 1
+            fi
+          fi
+
+          echo "✅ Merge source is allowed."
