@@ -1,0 +1,6 @@
+openpyxl
+pandas
+XlsxWriter
+psycopg2-binary
+arabic-reshaper
+python-bidi
