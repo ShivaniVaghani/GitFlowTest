@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,6 +36,10 @@ public class ScriptController {
     @Value("${scripts.directory:./scripts}")
     private String scriptsDir;
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ScriptConfig> listScripts() {
+        return scriptService.listConfigs();
+    }
     @PostMapping("/{name}/run")
     public ResponseEntity<?> runScript(
             @PathVariable String name,
@@ -51,15 +56,11 @@ public class ScriptController {
             throw ex;
         }
 
-
         // 2) Build command dynamically
-
         List<String> cmd = new ArrayList<>();
-        cmd.add(pythonInterpreter);                     // <- use venv python
+        cmd.add(pythonInterpreter);
         cmd.add("-m");
         cmd.add("scripts." + name);
-
-
 
         for (ScriptParameter p : cfg.getParams()) {
             String key = p.getName();
@@ -100,7 +101,7 @@ public class ScriptController {
                 logger.error("Script '{}' failed with exit {}: {}", name, exitCode, output);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(Map.of(
-                                "error", "Script failed (" + name + "), exit=" + exitCode,
+                                "error",  "Script failed (" + name + "), exit=" + exitCode,
                                 "output", output
                         ));
             }
@@ -114,11 +115,14 @@ public class ScriptController {
                         .body(Map.of("error", "Output file not found: " + filePath));
             }
 
-            // 6) Build and return public URL
+            // 6) Build and return public URL under /files/
             String filename = outFile.getName();
             String link = "/output/" + filename;
             logger.info("Script '{}' completed successfully, output stored at {}", name, filePath);
-            return ResponseEntity.ok(Map.of("link", link));
+
+            return ResponseEntity.ok(Map.of(
+                    "link", link
+            ));
 
         } catch (IOException | InterruptedException e) {
             logger.error("Error running script '{}': {}", name, e.getMessage());
@@ -126,4 +130,5 @@ public class ScriptController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
 }

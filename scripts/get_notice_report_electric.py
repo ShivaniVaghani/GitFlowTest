@@ -1,3 +1,5 @@
+# Due to DATA availability issue in DEV WHERE t.workflow_id = 219 AND ts.is_deleted = TRUE -> this updated as true
+
 #!/usr/bin/env python3
 import argparse
 import os
@@ -56,7 +58,7 @@ def get_workflow_metadata_nd_salalah(req_start_date: str = start_prev_month,
         JOIN app_user u ON t.user_id = u.user_id
         JOIN task ts ON t.task_id = ts.task_id
         JOIN account_details ad ON t.account_no = (ad.account_details_json->>'Account No.')::TEXT
-        WHERE t.workflow_id = 219 AND ts.is_deleted = FALSE
+        WHERE t.workflow_id = 219 AND ts.is_deleted = TRUE
           AND t.finished_date BETWEEN %s AND %s
         ORDER BY t.finished_date DESC;"""
         cursor.execute(query, (req_start_date, req_end_date))

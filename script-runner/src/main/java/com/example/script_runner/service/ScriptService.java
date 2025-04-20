@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ScriptService {
@@ -22,8 +25,8 @@ public class ScriptService {
     /**
      * @return list of all available script names
      */
-    public List<String> getAvailableScripts() {
-        return List.copyOf(registry.listScriptNames());
+    public List<ScriptConfig> listConfigs() {
+        return new ArrayList<>(registry.listConfigs());
     }
 
     /**
@@ -32,13 +35,10 @@ public class ScriptService {
      * @throws 404 if not found
      */
     public ScriptConfig getConfigFor(String name) {
-        ScriptConfig cfg = registry.getConfig(name);
-        if (cfg == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Script not found: " + name
-            );
-        }
-        return cfg;
+        return registry.getConfig(name)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Script not found: " + name
+                ));
     }
 }

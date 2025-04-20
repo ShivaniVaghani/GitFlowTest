@@ -1,10 +1,8 @@
 package com.example.script_runner.config;
 
-import com.example.script_runner.config.ScriptConfig;
-import com.example.script_runner.config.ScriptParameter;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -12,55 +10,59 @@ import java.util.*;
  */
 @Component
 public class ScriptRegistry {
-    private final Map<String, ScriptConfig> registry = new HashMap<>();
+    private final Map<String,ScriptConfig> registry = new LinkedHashMap<>();
 
     /**
      * Initialize the registry with each script's configuration.
      */
     @PostConstruct
     public void init() {
-        // Example registration for get_notice_report_electric
+        // 1) Notice‑Delivery / Bill report
         registry.put(
                 "get_notice_report_electric",
                 new ScriptConfig(
-                        "get_notice_report_electric",                  // script name (without .py)
-                        "Generate ND or Bill Excel report for Salalah", // description
+                        "get_notice_report_electric",
+                        "Generate ND or Bill Excel report for Salalah",
                         Arrays.asList(
                                 new ScriptParameter("type", "nd", true,
                                         "nd or bill, determines which report to run"),
                                 new ScriptParameter("startDate", null, false,
                                         "Start date (YYYY-MM-DD), defaults to first of last month"),
-                                new ScriptParameter("endDate", null, false,
+                                new ScriptParameter("endDate",   null, false,
                                         "End date (YYYY-MM-DD, HH:MM:SS), defaults to yesterday at 23:59:59")
                         )
                 )
         );
 
-        // TODO: add other scripts similarly
-        // registry.put("another_script", new ScriptConfig(...));
+        // 2) RAECO EL MMR report
+        registry.put(
+                "get_report_el_raeco",
+                new ScriptConfig(
+                        "get_report_el_raeco",
+                        "RAECO EL MMR Report",
+                        Arrays.asList(
+                                new ScriptParameter("startDate", null, false,
+                                        "Query start (YYYY-MM-DD, HH:MM:SS), defaults to yesterday 07:00:01"),
+                                new ScriptParameter("endDate",   null, false,
+                                        "Query end   (YYYY-MM-DD, HH:MM:SS), defaults to today 07:00:00")
+                        )
+                )
+        );
+
+        // … add any additional scripts here in exactly the same way …
     }
 
-    /**
-     * Look up the configuration for a script by name.
-     * @param name script name (without .py)
-     * @return the ScriptConfig or null if not found
-     */
-    public ScriptConfig getConfig(String name) {
-        return registry.get(name);
+    /** Optional helper if you want to register at runtime. */
+    public void register(ScriptConfig cfg) {
+        registry.put(cfg.getName(), cfg);
     }
 
-    /**
-     * List all registered script names.
-     * @return set of script identifiers
-     */
-    public Set<String> listScriptNames() {
-        return Collections.unmodifiableSet(registry.keySet());
+    /** Lookup by name. */
+    public Optional<ScriptConfig> getConfig(String name) {
+        return Optional.ofNullable(registry.get(name));
     }
 
-    /**
-     * Retrieve all script configurations.
-     * @return unmodifiable collection of configs
-     */
+    /** Return all registered configs. */
     public Collection<ScriptConfig> listConfigs() {
         return Collections.unmodifiableCollection(registry.values());
     }
