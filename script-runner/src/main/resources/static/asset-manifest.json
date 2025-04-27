@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.48fe5075.css",
-    "main.js": "/static/js/main.c25a1804.js",
+    "main.css": "/static/css/main.61350cfb.css",
+    "main.js": "/static/js/main.5a7daf7b.js",
     "static/media/loginImage.png": "/static/media/loginImage.91e5acd86e808c993a72.png",
     "static/media/Bluefield.png": "/static/media/Bluefield.35ba8034e89cf9124804.png",
     "index.html": "/index.html",
-    "main.48fe5075.css.map": "/static/css/main.48fe5075.css.map",
-    "main.c25a1804.js.map": "/static/js/main.c25a1804.js.map"
+    "main.61350cfb.css.map": "/static/css/main.61350cfb.css.map",
+    "main.5a7daf7b.js.map": "/static/js/main.5a7daf7b.js.map"
   },
   "entrypoints": [
-    "static/css/main.48fe5075.css",
-    "static/js/main.c25a1804.js"
+    "static/css/main.61350cfb.css",
+    "static/js/main.5a7daf7b.js"
   ]
 }
