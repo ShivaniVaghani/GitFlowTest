@@ -1,0 +1,78 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .hide-scrollbar {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
+  /* body.light  {
+    --text-color: #333;
+    --bg-color: #000;
+    --border-color: #ccc;
+  } */
+  
+  body.dark {
+    --text-color: #ccc;
+    --bg-color: #000;
+    --border-color: #444;
+  }
+  
+  body.high-contrast {
+    --text-color: #fff;
+    --bg-color: #000;
+    --border-color: #fff;
+  }
+  
+  body {
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    border-color: var(--border-color);
+    font-family: 'MediumFont'
+  }
+
+
+
+.custom-zoom-control{
+  top: 60px;
+}
+
+.leaflet-container .leaflet-control-container .leaflet-top .leaflet-right .leaflet-control-zoom .leaflet-bar .leaflet-control {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  border: unset;
+  margin-right: 13px;
+}
+
+.leaflet-container .leaflet-control-container .leaflet-top .leaflet-right .leaflet-control-zoom .leaflet-bar .leaflet-control .leaflet-control-zoom-in,
+.leaflet-container .leaflet-control-container .leaflet-top .leaflet-right .leaflet-control-zoom .leaflet-bar .leaflet-control .leaflet-control-zoom-out{
+  width: 40px;
+  height: 32px;
+  border-radius: 4px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 3px 0px #606C800D;
+}
+
+.leaflet-container .leaflet-control-container .leaflet-top .leaflet-right .leaflet-control-layers .leaflet-control{
+  width: 40px;
+  height: 32px;
+  border-radius: 4px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 3px 0px #606C800D;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 13px;
+}
+
+.leaflet-container .leaflet-control-container .leaflet-top .leaflet-right .leaflet-control-layers .leaflet-control .leaflet-control-layers-toggle{
+  width: 20px;
+  height: 20px;
+}
+ 
