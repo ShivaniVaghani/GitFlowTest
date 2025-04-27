@@ -2,17 +2,24 @@ package com.example.script_runner.controller;
 
 import com.example.script_runner.config.ScriptConfig;
 import com.example.script_runner.config.ScriptParameter;
+import com.example.script_runner.model.entity.ScriptEntity;
+import com.example.script_runner.model.entity.ScriptMetadataDTO;
+import com.example.script_runner.repository.ScriptRepository;
 import com.example.script_runner.service.ScriptService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,8 +36,15 @@ public class ScriptController {
 
     private final ScriptService scriptService;
 
-    public ScriptController(ScriptService scriptService) {
+    private final ScriptRepository repository;
+
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public ScriptController(ScriptService scriptService, ScriptRepository repository, ObjectMapper objectMapper) {
         this.scriptService = scriptService;
+        this.repository = repository;
+        this.objectMapper = objectMapper;
     }
 
     @Value("${scripts.directory:./scripts}")
@@ -130,5 +144,81 @@ public class ScriptController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
+    /** List all active scripts (DB rows) */
+    @GetMapping
+    public List<ScriptEntity> listAll() {
+        return repository.findAllByActiveTrue();
+    }
+
+    /** Get a single script by its DB ID */
+    @GetMapping("/{id}")
+    public ScriptEntity getOne(@PathVariable Long id) {
+        return repository.findById(id)
+                .filter(ScriptEntity::isActive)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Script not found")
+                );
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ScriptEntity createScript(
+            @RequestPart("metadata") String metadataString,
+            @RequestPart("file") MultipartFile file
+    ) throws IOException {
+
+        // 1) Deserialize the JSON manually
+        ScriptMetadataDTO metadata =
+                objectMapper.readValue(metadataString, ScriptMetadataDTO.class);
+
+
+        // 2) Build entity from metadata
+        ScriptEntity script = ScriptEntity.builder()
+                .name(metadata.getName())
+                .description(metadata.getDescription())
+                .parameters(metadata.getParameters())
+                .version(metadata.getVersion())
+                .active(metadata.isActive())
+                .build();
+
+        // 2) Read file contents into scriptBody
+        String code = new String(file.getBytes(), StandardCharsets.UTF_8);
+        script.setScriptBody(code);
+
+        // 3) Persist
+        return repository.save(script);
+    }
+    /** Update an existing script */
+    @PutMapping("/{id}")
+    public ScriptEntity update(@PathVariable Long id,
+                               @RequestBody ScriptEntity incoming) {
+        ScriptEntity existing = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Script not found")
+                );
+        // copy mutable fields
+        existing.setName(incoming.getName());
+        existing.setDescription(incoming.getDescription());
+        existing.setScriptBody(incoming.getScriptBody());
+        existing.setParameters(incoming.getParameters());
+        existing.setVersion(incoming.getVersion());
+        existing.setActive(incoming.isActive());
+        return repository.save(existing);
+    }
+
+    /** Soft-delete (deactivate) */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        ScriptEntity existing = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Script not found")
+                );
+        existing.setActive(false);
+        repository.save(existing);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
 
 }

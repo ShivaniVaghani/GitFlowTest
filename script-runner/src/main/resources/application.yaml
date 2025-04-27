@@ -1,0 +1,76 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE}
+      max-request-size: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE}
+
+  datasource:
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      minimum-pool-size: ${SPRING_DATASOURCE_HIKARI_MINIMUM_POOL_SIZE}
+      maximum-pool-size: ${SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE}
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT}
+        jdbc:
+          batch_size: ${SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_BATCH_SIZE}
+          lob:
+            non_contextual_creation: ${SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION}
+      order_inserts: ${SPRING_JPA_PROPERTIES_ORDER_INSERTS}
+      order_updates: ${SPRING_JPA_PROPERTIES_ORDER_UPDATES}
+#    show-sql: true
+
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    username: ${REDIS_USERNAME}
+    password: ${REDIS_PASSWORD}
+    database: ${REDIS_DATABASE}
+
+  mail:
+    host: ${SPRING_MAIL_HOST}
+    port: ${SPRING_MAIL_PORT}
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+    protocol: ${SPRING_MAIL_PROTOCOL}
+    properties:
+      mail:
+        smtp:
+          auth: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+          starttls:
+            enable: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
+
+firebase:
+  web:
+    config:
+      path: ${FIREBASE_WEB_CONFIG_PATH}
+  mobile:
+    config:
+      path: ${FIREBASE_MOBILE_CONFIG_PATH}
+
+aws:
+  s3:
+    bucket-name: ${AWS_S3_BUCKET_NAME}
+  region: ${AWS_REGION}
+
+scheduler:
+  schedule: ${REASSIGN_SCHEDULE}
+  user:
+    id: ${SCHEDULER_USER_ID}
+  workflow-id: ${RECONNECTION_WORKFLOW_ID_LIST}
+
+management:
+  endpoints:
+    web:
+      base-path: /aabcdoopx
+      exposure:
+        include: health
+    health:
+      show-details: always
+      probes:
+        enabled: true
