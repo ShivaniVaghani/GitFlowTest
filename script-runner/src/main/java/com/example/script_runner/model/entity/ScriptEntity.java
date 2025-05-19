@@ -1,21 +1,20 @@
 package com.example.script_runner.model.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import com.vladmihalcea.hibernate.type.json.JsonType;
-import jakarta.persistence.*;
-import java.util.List;
-import java.util.UUID;
-
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter@Setter
-@Builder
+@Data
 @Entity
 @Table(name = "scripts")
 public class ScriptEntity {

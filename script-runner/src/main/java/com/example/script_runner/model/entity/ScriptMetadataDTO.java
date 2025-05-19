@@ -1,15 +1,10 @@
 package com.example.script_runner.model.entity;
 
-import com.example.script_runner.model.entity.ScriptParamDTO;
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@Builder
+@Data
 public class ScriptMetadataDTO {
     private String name;
     private String description;

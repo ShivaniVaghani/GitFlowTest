@@ -3,11 +3,10 @@ package com.example.script_runner.service;
 import com.example.script_runner.config.ScriptConfig;
 import com.example.script_runner.config.ScriptParameter;
 import com.example.script_runner.model.entity.ScriptEntity;
-import com.example.script_runner.model.entity.ScriptParamDTO;
 import com.example.script_runner.repository.ScriptRepository;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -29,6 +28,13 @@ public class ScriptService {
                 .collect(Collectors.toList());
     }
 
+    public ScriptConfig getScriptConfigByName(String name) {
+        ScriptEntity e = repository.findByName(name)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Script not found: " + name));
+        return toConfig(e);
+    }
+
     public ScriptConfig getConfigFor(String name) {
         ScriptEntity e = repository.findByNameAndActiveTrue(name)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -36,14 +42,14 @@ public class ScriptService {
         return toConfig(e);
     }
 
-    private ScriptConfig toConfig(ScriptEntity e) {
-        List<ScriptParameter> params = e.getParameters().stream()
+    private ScriptConfig toConfig(ScriptEntity scriptEntity) {
+        List<ScriptParameter> params = scriptEntity.getParameters().stream()
                 .map(p -> new ScriptParameter(
                         p.getName(),
                         p.getDefaultValue(),
                         p.isRequired(),
                         p.getDescription()))
                 .collect(Collectors.toList());
-        return new ScriptConfig(e.getName(), e.getDescription(), params);
+        return new ScriptConfig(scriptEntity.getName(), scriptEntity.getDescription(), scriptEntity.getScriptBody(), params);
     }
 }

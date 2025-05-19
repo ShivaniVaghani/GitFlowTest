@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface ScriptRepository extends JpaRepository<ScriptEntity, Long> {
     Optional<ScriptEntity> findByNameAndActiveTrue(String name);
+    Optional<ScriptEntity> findByName(String name);
     List<ScriptEntity> findAllByActiveTrue();
 
     String abc = "# Due to DATA availability issue in DEV WHERE t.workflow_id = 219 AND ts.is_deleted = TRUE -> this updated as true\n" +
