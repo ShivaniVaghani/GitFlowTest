@@ -1,14 +1,13 @@
-package com.example.script_runner.model.entity;
+package com.example.script_runner.dto;
 
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class ScriptParamDTO {
+@AllArgsConstructor
+public class ScriptParameterDTO {
     private String name;
     private String defaultValue;
     private boolean required;
     private String description;
-
-    // default ctor, getters & setters
 }
