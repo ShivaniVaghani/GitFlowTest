@@ -155,7 +155,7 @@ public class ScriptController {
     @GetMapping
     public ResponseEntity<?> listAll() {
         try {
-            List<ScriptData> scriptDataList = repository.findAll();
+            List<ScriptData> scriptDataList = repository.findAllByActiveTrue();
             return ResponseEntity.ok(scriptDataList);
         } catch (Exception ex) {
             String message = "An unexpected error occurred while fetching scripts. Please try again later.";
