@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@PropertySource(value = "file:/Users/Shared/secret/secret.env", ignoreResourceNotFound = true)
+@PropertySource(value = "file:D:\\Harshit Vachhani\\GitFlowTest\\secret.env", ignoreResourceNotFound = true)
 public class ScriptRunnerApplication {
     public static void main(String[] args) {
         SpringApplication.run(ScriptRunnerApplication.class, args);
